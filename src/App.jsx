@@ -1,12 +1,18 @@
 import React from "react";
 import { useState } from "react";
 import { nanoid } from "nanoid";
+
 import Intro from "./components/Intro.jsx";
+//People Section Import
 import Friends from "./components/Friends.jsx";
 import FriendsForm from "./components/FriendsForm.jsx";
+//Items Section Import
+import Items from "./components/Items.jsx";
 
 
 function App() {
+
+  //PEOPLE SECTION FUNCTIONS
   
   //For State
   //friends - array of multiple friend - accessed by FriendList
@@ -15,11 +21,18 @@ function App() {
 
   //Function to add new friend to the FriendsList Array
   function addFriend(name) {
-    //uses nanoid for random string id generation 
-    const newFriend = { id: nanoid(), name }
-    //appends newFriend to the friendlist array
-    setFriends([...friends, newFriend])
-    console.log(countFriends + 1)
+    //can only add maximum of 10 friends
+    if(countFriends<3){
+        //uses nanoid for random string id generation 
+        const newFriend = { id: nanoid(), name }
+        //appends newFriend to the friendlist array
+        setFriends([...friends, newFriend])
+        console.log(countFriends + 1)
+    }
+    else{
+      alert("No more friends can be added!")
+    }
+   
   }
 
   //Function to delete friend from FriendList array
@@ -43,6 +56,15 @@ function App() {
   //Count of friends
   const countFriends = FriendsList.length
 
+  //ITEMS SECTION FUNCTIONS
+  
+  const items = []
+
+  function addItem(iname){
+    console.log("Accessing the item name from App.jsx")
+    console.log(iname)
+  }
+
   return (
     <div>
       {/* Introduction of the App */}
@@ -51,7 +73,7 @@ function App() {
       {/* Friends Form Component - passes the function addFriend as props */}
       <FriendsForm addFriend={addFriend} />
 
-      {/* Friends List Component */}
+      {/* Friends List Component - Displays the friends added*/}
       <div>
         <ul>
           {FriendsList}
@@ -59,16 +81,16 @@ function App() {
       </div>
 
 
-      {/* Entering food items & their splits */}
+      {/* Items Form Component - Entering food items, prices & their splits */}
+      <Items addItem={addItem} />
+      
+      {/* Items List Component - Displays the Items added*/}
       <div>
-        <h3>Items Ordered:</h3>
-        <h4>Enter Item Name - </h4>
-        <input type="Text" placeholder="Name"></input>
-        <h4>Enter Item Cost - </h4>
-        <input type="Text" placeholder="Name"></input>
-        <br />
-        <button>Add</button>
+        <ul>
+          {/* {ItemsList} */}
+        </ul>
       </div>
+
 
       {/* Entering Tax % and Tips */}
       <div>
@@ -95,7 +117,6 @@ function App() {
           <button>Share Receipt</button>
         </p>
       </div>
-
     </div>
   )
 }

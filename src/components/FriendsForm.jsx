@@ -29,7 +29,7 @@ function FriendsForm(props) {
             <h3>People:</h3>
             <h4>Enter Name - </h4>
             <form onSubmit={handleSubmission}>
-                <input type="Text" placeholder="Name" onChange={handleName} value={fname}></input>
+                <input type="Text" placeholder="Name" onChange={handleName} value={fname} required></input>
                 <button type="submit">Add</button>
             </form>
         </div>
