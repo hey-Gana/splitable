@@ -9,26 +9,51 @@ function Items(props) {
 
     //State for capturing Item Name and Price input
     // itemName - name of item added
-    // addItem - function that adds the item input
-    const [itemName,addItem] = useState("")
+    // addItemName - function that adds the item input
+    const [itemName, addItemName] = useState("")
+    const [itemPrice, addPrice] = useState("")
 
     //Handles Form Submission
-    function handleSubmit(e){
+    function handleSubmit(e) {
         e.preventDefault()
-        props.addItem(itemName)
-        addItem("")
+        if (!itemName || !itemPrice) {
+            alert("Please enter both item name and price!");
+            return;
+        }
+        props.addItem(itemName, itemPrice)
+        addItemName("")
+        addPrice("")
         setAddingItemState(false)
     }
 
-    //Handles Input into text box 
-    function handleChange(e){
-        addItem(e.target.value)
+    //Handles Input for item name
+    function handleChange(e) {
+        addItemName(e.target.value)
     }
+
+    //Handles Input for price
+    function handlePriceChange(e) {
+        addPrice(e.target.value)
+    }
+
 
     // When Add Item button is clicked
     const addItemTemplate = (
         <form onSubmit={handleSubmit}>
-            <input type="text" placeholder="Item Name" value={itemName} onChange={handleChange} required/>
+            <input type="text" placeholder="Item Name" value={itemName} onChange={handleChange} required />
+            <input type="text"
+                placeholder="Item Price"
+                value={itemPrice}
+                onChange={(e) => {
+                    const value = e.target.value;
+                    // Allow only numbers and at most one decimal point
+                    if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                        handlePriceChange(e);
+                    }
+                }}
+                required
+            />
+
             <button type="Submit">Save</button>
             <button type="button" onClick={() => setAddingItemState(false)}>Cancel</button>
         </form>
