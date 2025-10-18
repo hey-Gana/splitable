@@ -14,7 +14,7 @@ import ItemsList from "./components/ItemsList.jsx";
 function App() {
 
   //PEOPLE SECTION FUNCTIONS
-  
+
   //For State
   //friends - array of multiple friend - accessed by FriendList
   //setFriends -function to add friend to array
@@ -23,27 +23,37 @@ function App() {
   //Function to add new friend to the FriendsList Array
   function addFriend(name) {
     //can only add maximum of 10 friends
-    if(countFriends<3){
-        //uses nanoid for random string id generation 
-        const newFriend = { id: nanoid(), name }
-        //appends newFriend to the friendlist array
-        setFriends([...friends, newFriend])
-        console.log(countFriends + 1)
+    if (countFriends < 3) {
+      //uses nanoid for random string id generation 
+      const newFriend = { id: nanoid(), name }
+      //appends newFriend to the friendlist array
+      setFriends([...friends, newFriend])
+      // console.log(countFriends + 1)
     }
-    else{
+    else {
       alert("No more friends can be added!")
     }
-   
+
   }
 
-  //Function to delete friend from FriendList array
+  //Function to delete friend from FriendList array and update Items
   function delFriend(id) {
     // console.log(id)
     //Creates an array with all friend that doesnt match with the deleted friend's id
     const remainingFriends = friends.filter((friend) => id !== friend.id)
     setFriends(remainingFriends)
-    console.log(countFriends - 1)
+    // console.log(countFriends - 1)
+
+    // Remove friend from all items
+    setItem(prevItems =>
+      prevItems.map(item => ({
+        ...item,
+        taggedFriends: item.taggedFriends.filter(fid => fid !== id)
+      }))
+    );
   }
+
+
   //Friends List - accesses friends and maps them to Friends.jsx component
   const FriendsList = friends?.map((friend) =>
   (<Friends
@@ -59,33 +69,69 @@ function App() {
 
   //ITEMS SECTION FUNCTIONS
 
-  const [ListOfItems,setItem] = useState([])
-  
+  //For State
+  //ListOfItems - array of multiple items and its price added from Items.jsx
+  //setItem - function to add item and its price to the ListOfItems array
+  const [ListOfItems, setItem] = useState([])
 
-  const items = ListOfItems?.map((item) => 
-  (<ItemsList 
+  //Items list - accesses ListOfItems and maps them to ItemsList.jsx component
+  const items = ListOfItems?.map((item) =>
+  (<ItemsList
     id={item.id}
     name={item.iname}
     price={item.price}
-    splitFriends = {friends}
+    //passing friends list to ItemsList.jsx
+    splitFriends={friends}
+    //passing tagged friends to ItemsList.jsx
+    taggedFriends={item.taggedFriends}
     key={item.id}
+    //passing the delItem() to ItemsList.jsx so that it can be called by props
+    //callback props
     delItem={delItem}
-   />))
-  
+    //function to tag friend to items
+    //callback props
+    tagFriendToItem={tagFriendToItem}
+
+  />))
+
   //Function to add items 
-  function addItem(iname,price){
-    const newItem = {id:nanoid(), iname, price: parseFloat(price)}
-    setItem([...ListOfItems,newItem]);
-    console.log(FriendsList)
+  function addItem(iname, price) {
+    //gets item name, price and taggedFriends list from Items.jsx
+    const newItem = { id: nanoid(), iname, price: parseFloat(price), taggedFriends: [] }
+    setItem([...ListOfItems, newItem]);
+    // console.log(FriendsList)
   }
 
   //function to delete items
-  function delItem(id){
+  function delItem(id) {
     //passing the delItem() to ItemsList.jsx so that it can be called by props
     //callback props
     const remainingItems = ListOfItems.filter((item) => id !== item.id)
     setItem(remainingItems)
   }
+
+  //function to tag friends to items
+  function tagFriendToItem(itemId, friendId) {
+    setItem(prevItems => {
+      const newItems = prevItems.map(item => {
+        // If item ids match and friend is not already tagged
+        if (item.id === itemId && !item.taggedFriends.includes(friendId)) {
+          return {
+            ...item,
+            taggedFriends: [...item.taggedFriends, friendId]
+          };
+        }
+        return item;
+      });
+
+      // // Log the updated array for verification
+      // console.log("Updated items:", newItems);
+
+      return newItems;
+    });
+  }
+
+
 
   return (
     <div>
@@ -106,12 +152,12 @@ function App() {
       {/* Items Form Component - Entering food items, prices & their splits */}
       <Items addItem={addItem} />
 
-      
+
       {/* Items List Component - Displays the Items added*/}
       <div>
         <h3> Items Added: </h3>
         <ul>
-         {items}
+          {items}
         </ul>
       </div>
 
@@ -138,7 +184,7 @@ function App() {
           <br />
           Hero2: 7.2$
           <br />
-          <button>Share Receipt</button>
+          <button onClick={() => { console.log(friends); console.log(items) }}>Share Receipt</button>
         </p>
       </div>
     </div>
