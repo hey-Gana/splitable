@@ -36,6 +36,7 @@ function Items(props) {
         addPrice(e.target.value)
     }
 
+    //Conditional Rendering
 
     // When Add Item button is clicked
     const addItemTemplate = (

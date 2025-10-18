@@ -9,7 +9,10 @@ import FriendsForm from "./components/FriendsForm.jsx";
 //Items Section Import
 import Items from "./components/Items.jsx";
 import ItemsList from "./components/ItemsList.jsx";
-
+//Tax Section Import
+import Tax from "./components/Tax.jsx";
+//Tips Section Import
+import Tips from "./components/Tips.jsx";
 
 function App() {
 
@@ -162,13 +165,14 @@ function App() {
       </div>
 
 
-      {/* Entering Tax % and Tips */}
+      {/* Entering Tax */}
       <div>
-        <h3>Tax & Tips:</h3>
-        <h4>Enter Tax Amount - </h4>
-        <input type="Text" placeholder="Name"></input>
-        <h4>Enter Tips -</h4>
-        <input type="Text" placeholder="Name"></input>
+        <Tax />
+      </div>
+
+      {/* Entering Tips */}
+      <div>
+        <Tips />
       </div>
 
       {/* Calculation */}
