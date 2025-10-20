@@ -77,6 +77,19 @@ function App() {
   //setItem - function to add item and its price to the ListOfItems array
   const [ListOfItems, setItem] = useState([])
 
+  //Total amount before tax and tips
+  let totalAmt = 0;
+
+  //Calculating totalAmt
+  for (const item of ListOfItems) {
+    totalAmt += Number(item.price || 0)
+  }
+  // Round totalAmt to 2 decimals
+  totalAmt = Math.round(totalAmt * 100) / 100;
+
+  // Conditional display: only show Items Added section if items are added
+  const itemsDisplay = ListOfItems.length>0?<h3> Items Added: </h3>   : null;
+
   //Items list - accesses ListOfItems and maps them to ItemsList.jsx component
   const items = ListOfItems?.map((item) =>
   (<ItemsList
@@ -135,6 +148,10 @@ function App() {
   }
 
 
+  //Taxes Section
+  
+
+
 
   return (
     <div>
@@ -158,25 +175,33 @@ function App() {
 
       {/* Items List Component - Displays the Items added*/}
       <div>
-        <h3> Items Added: </h3>
+        {/* Conditional Display of Items added heading */}
+        {itemsDisplay}
         <ul>
           {items}
         </ul>
       </div>
 
 
+      <div>
+        <h3>Bill Amount: ${totalAmt.toFixed(2)}</h3>
+      </div>
+
       {/* Entering Tax */}
       <div>
-        <Tax />
+        {/* passing totalAmt to Tax.jsx */}
+        <Tax totalAmt={totalAmt}/>
       </div>
 
       {/* Entering Tips */}
       <div>
-        <Tips />
+        {/* passing totalAmt to Tips.jsx */}
+        <Tips totalAmt={totalAmt} />
       </div>
 
       {/* Calculation */}
-      <button>Splitable</button>
+      <br />
+      <button onClick={() => console.log(totalAmt)}>Splitable</button>
 
       {/* Display Results */}
       <div>
@@ -188,7 +213,7 @@ function App() {
           <br />
           Hero2: 7.2$
           <br />
-          <button onClick={() => { console.log(friends); console.log(items) }}>Share Receipt</button>
+          <button>Share Receipt</button>
         </p>
       </div>
     </div>

@@ -1,23 +1,70 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 
-function Tips() {
+function Tips(props) {
+  //State
+  //tipType -variable for radio button
+  //setTipType - function that sets value for tipType
+  const [tipType, setTipType] = useState("");
 
-    const [tipValue, setTipValue] = useState("");
+  //tipValue -variable for text input
+  //setTipValue- function that sets value for taxValue
+  const [tipValue, setTipValue] = useState("");
 
-    // Handle tip input (also numeric only)
-    function handleTipInput(e) {
-        const value = e.target.value;
-        if (/^\d*\.?\d*$/.test(value)) {
-            setTipValue(value);
-        }
+  let tipAmt=0;
+  //Calculating Tips amount if % is chosen 
+  if (tipType === "percentage") {
+    tipAmt = props.totalAmt * (Number(tipValue) / 100);
+  } else if (tipType === "amount") {
+    tipAmt = Number(tipValue);
+  }
+
+  // Conditional display: only show tip if % is chosen
+  const tipDisplay = tipType === "percentage" && tipValue !== ""
+    ? `Calculated Tip: $${(props.totalAmt * (Number(tipValue) / 100)).toFixed(2)}`
+    : null;
+  
+  //Handle radio button change
+  function handleTipType(e) {
+    setTipType(e.target.value);
+    setTipValue(""); // reset input when changing type
+  }
+
+  //Handle tax input and restrict to numbers/decimal
+  function handleTipInput(e) {
+    const value = e.target.value;
+    if (/^\d*\.?\d*$/.test(value)) {
+        //restrict value for % to be between 0 & 100
+      if (value === "" || (Number(value) >= 0 && Number(value) <= 100)) {
+        setTipValue(value);
+      }
     }
+  }
 
-    return (
-        <div>
-            Tips:
-            <input type="text" placeholder="Enter tip amount" value={tipValue} onChange={handleTipInput} />
-        </div>
-    )
+
+
+
+  return (
+    <div>
+      <h4>Enter Tips</h4>
+      <label>
+        <input
+          type="radio" name="tiptype" value="percentage" onChange={handleTipType} checked={tipType === "percentage"}/>
+        Percentage
+      </label>
+      
+      <label>
+        <input
+          type="radio" name="tiptype" value="amount" onChange={handleTipType} checked={tipType === "amount"}/>
+        Amount
+      </label>
+
+      <input type="text" placeholder={ tipType === "percentage" ? "Enter tip in %" : tipType === "amount" ? "Enter tip amount" : ""} value={tipValue} onChange={handleTipInput} />
+      {/* Displaying Calculated Tip Amount */}
+      <div>
+        {tipDisplay}
+      </div>
+    </div>
+  );
 }
 
-export default Tips
+export default Tips;
