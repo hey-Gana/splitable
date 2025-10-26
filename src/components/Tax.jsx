@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function Tax(props) {
   //State
@@ -10,13 +10,20 @@ function Tax(props) {
   //setTaxValue- function that sets value for taxValue
   const [taxValue, setTaxValue] = useState("");
 
+  //Cannot do direct props callback as it run into infinite loop - hence using useEffect()
+  //calculation of tax amount
+  useEffect(() => {
   let taxAmt = 0;
-  //Calculating Tax amount if % is chosen 
+
   if (taxType === "percentage") {
     taxAmt = props.totalAmt * (Number(taxValue) / 100);
   } else if (taxType === "amount") {
     taxAmt = Number(taxValue);
   }
+  // Call the parent callback only when tax changes
+  props.onTaxChange(taxAmt.toFixed(2));
+}, [taxType, taxValue, props.totalAmt]);
+
 
 // Conditional display: only show tax if % is chosen
   const taxDisplay = taxType === "percentage" && taxValue !== ""

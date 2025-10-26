@@ -43,7 +43,7 @@ function ItemsList(props) {
                                 return f ? f.name : "";
                             })
                             .join(", ")
-                        : "None"}
+                        : "All"}
                 </p>
             </div>
 

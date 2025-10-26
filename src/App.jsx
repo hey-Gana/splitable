@@ -13,6 +13,8 @@ import ItemsList from "./components/ItemsList.jsx";
 import Tax from "./components/Tax.jsx";
 //Tips Section Import
 import Tips from "./components/Tips.jsx";
+//Split Calculation Import
+import SplitCalculator from "./components/SplitCalculator.jsx";
 
 function App() {
 
@@ -88,7 +90,7 @@ function App() {
   totalAmt = Math.round(totalAmt * 100) / 100;
 
   // Conditional display: only show Items Added section if items are added
-  const itemsDisplay = ListOfItems.length>0?<h3> Items Added: </h3>   : null;
+  const itemsDisplay = ListOfItems.length > 0 ? <h3> Items Added: </h3> : null;
 
   //Items list - accesses ListOfItems and maps them to ItemsList.jsx component
   const items = ListOfItems?.map((item) =>
@@ -149,7 +151,15 @@ function App() {
 
 
   //Taxes Section
-  
+  //taxAmt - taxAmt calculated by Tax.jsx
+  //setTaxAmt - a function that assigns value to taxAmt
+  const [taxAmt, setTaxAmt] = useState(0);
+
+  //Tips Section
+  //tipAmt - tipAmt calculated by Tips.jsx
+  //setTipAmt - a function that assigns value to tipAmt
+  const [tipAmt, setTipAmt] = useState(0);
+
 
 
 
@@ -190,32 +200,21 @@ function App() {
       {/* Entering Tax */}
       <div>
         {/* passing totalAmt to Tax.jsx */}
-        <Tax totalAmt={totalAmt}/>
+        <Tax totalAmt={totalAmt} onTaxChange={setTaxAmt} />
       </div>
 
       {/* Entering Tips */}
       <div>
         {/* passing totalAmt to Tips.jsx */}
-        <Tips totalAmt={totalAmt} />
+        <Tips totalAmt={totalAmt} onTipChange={setTipAmt} />
       </div>
 
       {/* Calculation */}
       <br />
-      <button onClick={() => console.log(totalAmt)}>Splitable</button>
-
+      <SplitCalculator friends={friends} items={ListOfItems} taxAmt={taxAmt} tipAmt={tipAmt}/>
+      
       {/* Display Results */}
-      <div>
-        <h3>Split:</h3>
-        <p>
-          Gana: 3.14$
-          <br />
-          Hero1: 12$
-          <br />
-          Hero2: 7.2$
-          <br />
-          <button>Share Receipt</button>
-        </p>
-      </div>
+      
     </div>
   )
 }
