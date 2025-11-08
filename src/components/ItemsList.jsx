@@ -22,29 +22,37 @@ function ItemsList(props) {
             </div> */}
 
             <div>
-                <h3> People Tagged:</h3>
-                <select defaultValue="" onChange={handleDropDownOption}>
-                    <option value="" disabled>
-                        Tag People
-                    </option>
-                    {/* Accessing splitFriends passed from app.jsx ; mapping it to drop down by accessing the object's properties - id and name */}
-                    {props.splitFriends.map((friend) => (
-                        <option key={friend.id} value={friend.id}>
-                            {friend.name}
+                <h3> People Tagged:
+                    <select defaultValue="" onChange={handleDropDownOption}>
+                        <option value="" disabled>
+                            Tag People
                         </option>
-                    ))}
-                </select>
-                <p>
-                    Tagged Friends:{" "}
-                    {props.taggedFriends.length > 0
-                        ? props.taggedFriends
-                            .map(id => {
-                                const f = props.splitFriends.find(friend => friend.id === id);
-                                return f ? f.name : "";
-                            })
-                            .join(", ")
-                        : "All"}
-                </p>
+                        {/* Accessing splitFriends passed from app.jsx ; mapping it to drop down by accessing the object's properties - id and name */}
+                        {props.splitFriends.map((friend) => (
+                            <option key={friend.id} value={friend.id}>
+                                {friend.name}
+                            </option>
+                        ))}
+                    </select>
+                </h3>
+                {props.taggedFriends.length > 0 ? (
+                    <ul>
+                        {props.taggedFriends.map((id) => {
+                            const f = splitFriends.find(friend => friend.id === id);
+                            if (!f) return null;
+                            return (
+                                <li key={id}>
+                                    {f.name}{" "}
+                                    <button onClick={() => props.removeFriendFromItem(props.id, id)}>
+                                        x
+                                    </button>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                ) : (
+                    <p>No friends tagged yet</p>
+                )}
             </div>
 
             <div>

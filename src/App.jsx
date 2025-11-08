@@ -58,7 +58,6 @@ function App() {
     );
   }
 
-
   //Friends List - accesses friends and maps them to Friends.jsx component
   const FriendsList = friends?.map((friend) =>
   (<Friends
@@ -109,7 +108,8 @@ function App() {
     //function to tag friend to items
     //callback props
     tagFriendToItem={tagFriendToItem}
-
+    //function to delete person from item
+    removeFriendFromItem={removeFriendFromItem}
   />))
 
   //Function to add items 
@@ -147,6 +147,22 @@ function App() {
 
       return newItems;
     });
+  }
+
+  //function to remove friend from a particular item
+  function removeFriendFromItem(itemId,friendId){
+    setItem(prevItems =>
+    prevItems.map(item => {
+      if (item.id === itemId) {
+        // Remove friendId from taggedFriends
+        return {
+          ...item,
+          taggedFriends: item.taggedFriends.filter(id => id !== friendId)
+        };
+      }
+      return item;
+    })
+  );
   }
 
 
