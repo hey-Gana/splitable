@@ -13,19 +13,30 @@ function SplitCalculator({ friends, items, taxAmt, tipAmt }) {
     //Splitting each item's cost
     items.forEach(item => {
       const price = parseFloat(item.price) || 0;
-      const tagged = item.taggedFriends && item.taggedFriends.length > 0
-        ? item.taggedFriends
-        : friends.map(f => f.id); // if not tagged, split among all
 
-      const share = price / tagged.length;
+      if (item.taggedFriends && item.taggedFriends.length > 0) {
+        // Prepare portions, default to 1 if not set
+        const portions = {};
+        item.taggedFriends.forEach(fid => {
+          portions[fid] = item.portions && item.portions[fid] ? item.portions[fid] : 1;
+        });
 
-      // Add share to each tagged friend
-      tagged.forEach(fid => {
-        if (totals[fid] !== undefined) {
-          totals[fid] += share;
-        }
-      });
+        const totalWeight = Object.values(portions).reduce((sum, w) => sum + Number(w), 0);
+
+        Object.entries(portions).forEach(([fid, weight]) => {
+          if (totals[fid] !== undefined && totalWeight > 0) {
+            totals[fid] += (price * weight) / totalWeight;
+          }
+        });
+
+      } else {
+        // fallback: split equally among all friends if none tagged
+        const tagged = friends.map(f => f.id);
+        const share = price / tagged.length;
+        tagged.forEach(fid => { totals[fid] += share; });
+      }
     });
+
 
     //Calculate total subtotal
     const subTotal = Object.values(totals).reduce((sum, val) => sum + val, 0);
@@ -37,7 +48,7 @@ function SplitCalculator({ friends, items, taxAmt, tipAmt }) {
       const tipShare = subTotal > 0 ? (sub / subTotal) * tipAmt : 0;
       const total = sub + taxShare + tipShare;
 
-    return {
+      return {
         name: friend.name,
         subtotal: sub.toFixed(2),
         tax: taxShare.toFixed(2),
@@ -52,16 +63,16 @@ function SplitCalculator({ friends, items, taxAmt, tipAmt }) {
   return (
     <div>
       <button onClick={SplitCost}>Split-a-bill</button>
-        {/* Display Splits */}
+      {/* Display Splits */}
       {splits.length > 0 && (
         <div>
           <h3>Split Summary</h3>
-          
+
           <ul>
             {splits.map((s, i) => (
               <li key={i}>
-                <strong>{s.name}</strong> — 
-                Subtotal: ${s.subtotal}, Tax: ${s.tax}, Tip: ${s.tip}, 
+                <strong>{s.name}</strong> —
+                Subtotal: ${s.subtotal}, Tax: ${s.tax}, Tip: ${s.tip},
                 <b> Total: ${s.total}</b>
               </li>
             ))}

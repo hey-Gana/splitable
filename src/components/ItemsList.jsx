@@ -1,65 +1,101 @@
-import React from "react";
+import React, { useState } from "react";
 
 function ItemsList(props) {
-    const { id, name, splitFriends } = props;
+  const { id, name, splitFriends } = props;
 
-    function handleDropDownOption(e) {
-        //passing the item's id and friend's id to App.jsx by calling tagFriendToItem()
-        // console.log("From Item:",e.target.value)
-        props.tagFriendToItem(props.id, e.target.value)
-        //resets the DropDown option
-        e.target.value = "";
-    }
+  // for slider visibility (friendId : true/false)
+  const [sliderVisibility, setSliderVisibility] = useState({});
 
-    return (
-        <li>
-            <div>
-                <label id={props.id}>{props.name} - {props.price}</label>
-            </div>
-            {/* <div>
-                <strong>Split Between:</strong>
+  // for slider values (friendId : integer(portion value))
+  const [portions, setPortions] = useState({});
 
-            </div> */}
+  // Add friend to item
+  function handleDropDownOption(e) {
+    props.tagFriendToItem(props.id, e.target.value);
+    e.target.value = "";
+  }
 
-            <div>
-                <h3> People Tagged:
-                    <select defaultValue="" onChange={handleDropDownOption}>
-                        <option value="" disabled>
-                            Tag People
-                        </option>
-                        {/* Accessing splitFriends passed from app.jsx ; mapping it to drop down by accessing the object's properties - id and name */}
-                        {props.splitFriends.map((friend) => (
-                            <option key={friend.id} value={friend.id}>
-                                {friend.name}
-                            </option>
-                        ))}
-                    </select>
-                </h3>
-                {props.taggedFriends.length > 0 ? (
-                    <ul>
-                        {props.taggedFriends.map((id) => {
-                            const f = splitFriends.find(friend => friend.id === id);
-                            if (!f) return null;
-                            return (
-                                <li key={id}>
-                                    {f.name}{" "}
-                                    <button onClick={() => props.removeFriendFromItem(props.id, id)}>
-                                        x
-                                    </button>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                ) : (
-                    <p>No friends tagged yet</p>
+  // Toggle visibility of slider for each friend
+  function toggleSlider(friendId) {
+    setSliderVisibility(prev => ({
+      ...prev,
+      [friendId]: !prev[friendId],
+    }));
+  }
+
+  // Update slider (portion) value
+  function handlePortionChange(friendId, value) {
+    const intVal = parseInt(value);
+    setPortions(prev => {
+      const updated = { ...prev, [friendId]: intVal };
+      props.updateItemPortions(props.id, updated);
+      return updated;
+    });
+
+  }
+
+  return (
+    <li>
+      <div>
+        <label id={props.id}>
+          {props.name} - ${props.price}
+        </label>
+      </div>
+
+      <div>
+        <h3>
+          People Tagged:
+          <select defaultValue="" onChange={handleDropDownOption}>
+            <option value="" disabled>
+              Tag People
+            </option>
+            {/* Displays friends list */}
+            {props.splitFriends.map(friend => (
+              <option key={friend.id} value={friend.id}>
+                {friend.name}
+              </option>
+            ))}
+          </select>
+        </h3>
+        {/* If any friend is tagged, display friend name,slider and remove button ; else split equally */}
+        {props.taggedFriends.length > 0 ? (
+          props.taggedFriends.map(id => {
+            const friend = props.splitFriends.find(f => f.id === id);
+            if (!friend) return null;
+
+            return (
+              <div key={friend.id}>
+                {/* when clicked on friend name: toggle slidervisibility */}
+                <span onClick={() => toggleSlider(friend.id)}>
+                  {friend.name}
+                </span>
+                {/* for friend with slider visibility, set their portion  */}
+                {sliderVisibility[friend.id] && (
+                  <div>
+                    <label>Portion size: {portions[friend.id] || 1}</label>
+                    <input type="range" min="1" max="5" value={portions[friend.id] || 1} onChange={e => handlePortionChange(friend.id, e.target.value)} />
+                  </div>
                 )}
-            </div>
 
-            <div>
-                <button onClick={() => props.delItem(props.id)}>Delete Item</button>
-            </div>
-        </li>
-    )
+                {/* remove button for friend tagged to item */}
+                <button onClick={() => props.removeFriendFromItem(props.id, friend.id)}>
+                  x
+                </button>
+
+              </div>
+            );
+          })
+        ) : (
+          <p>Split Equally</p>
+        )}
+      </div>
+
+      <div>
+        {/* Delete item from Item List */}
+        <button onClick={() => props.delItem(props.id)}>Delete Item</button>
+      </div>
+    </li>
+  );
 }
 
 export default ItemsList;

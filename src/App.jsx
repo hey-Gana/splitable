@@ -110,6 +110,8 @@ function App() {
     tagFriendToItem={tagFriendToItem}
     //function to delete person from item
     removeFriendFromItem={removeFriendFromItem}
+    //function to update items portion for each friend tagged
+    updateItemPortions={updateItemPortions}
   />))
 
   //Function to add items 
@@ -150,20 +152,31 @@ function App() {
   }
 
   //function to remove friend from a particular item
-  function removeFriendFromItem(itemId,friendId){
+  function removeFriendFromItem(itemId, friendId) {
     setItem(prevItems =>
-    prevItems.map(item => {
-      if (item.id === itemId) {
-        // Remove friendId from taggedFriends
-        return {
-          ...item,
-          taggedFriends: item.taggedFriends.filter(id => id !== friendId)
-        };
-      }
-      return item;
-    })
-  );
+      prevItems.map(item => {
+        if (item.id === itemId) {
+          // Remove friendId from taggedFriends
+          return {
+            ...item,
+            taggedFriends: item.taggedFriends.filter(id => id !== friendId)
+          };
+        }
+        return item;
+      })
+    );
   }
+
+  //function to add portions for friends tagged to items
+  function updateItemPortions(itemId, portions) {
+    setItem(prevItems =>
+      prevItems.map(item =>
+        item.id === itemId ? { ...item, portions } : item
+      )
+    );
+  }
+
+
 
 
   //Taxes Section
@@ -227,10 +240,10 @@ function App() {
 
       {/* Calculation */}
       <br />
-      <SplitCalculator friends={friends} items={ListOfItems} taxAmt={taxAmt} tipAmt={tipAmt}/>
-      
+      <SplitCalculator friends={friends} items={ListOfItems} taxAmt={taxAmt} tipAmt={tipAmt} />
+
       {/* Display Results */}
-      
+
     </div>
   )
 }
