@@ -26,13 +26,20 @@ function ItemsList(props) {
   // Update slider (portion) value
   function handlePortionChange(friendId, value) {
     const intVal = parseInt(value);
-    setPortions(prev => {
-      const updated = { ...prev, [friendId]: intVal };
-      props.updateItemPortions(props.id, updated);
-      return updated;
-    });
 
+    //setting the portion value for the person with friendId
+    setPortions(prev => ({
+      ...prev,
+      [friendId]: intVal,
+    }));
+
+    //parent update - passing it on to parent: App.jsx
+    props.updateItemPortions(props.id, {
+      ...portions,
+      [friendId]: intVal,
+    });
   }
+
 
   return (
     <li>
