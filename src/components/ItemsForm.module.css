@@ -1,0 +1,86 @@
+/* Container for Items Form */
+.container {
+  background-color: var(--ebony);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: var(--space-lg);
+  width: 100%;
+}
+
+/* Headings */
+.container h3 {
+  color: var(--reseda-green);
+  margin-bottom: var(--space-sm);
+}
+
+.container h4 {
+  color: var(--battleship-gray);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Form wrapper */
+form {
+  display: flex;
+  flex-wrap: wrap; /* allow inputs/buttons to wrap on small screens */
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* Input fields */
+.input {
+  flex: 1;
+  min-width: 120px;
+  padding: var(--space-sm);
+  border: 1px solid var(--dim-gray);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-color: var(--reseda-green);
+}
+
+/* Buttons */
+.button {
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--reseda-green);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.button:hover {
+  background-color: var(--cambridge-blue);
+}
+
+/* Cancel button overrides */
+.cancelButton {
+  background-color: var(--ebony);
+}
+
+.cancelButton:hover {
+  background-color: var(--dim-gray);
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 600px) {
+  form {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .input {
+    width: 100%; /* full width */
+  }
+
+  .button {
+    width: 100%; /* full width */
+  }
+}

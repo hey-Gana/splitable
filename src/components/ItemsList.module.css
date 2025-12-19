@@ -1,0 +1,113 @@
+/* Container for each item row */
+.itemRow {
+  display: flex;
+  flex-wrap: wrap; /* wrap columns on small screens */
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--dim-gray);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-sm);
+  background-color: var(--bg-card);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  gap: var(--space-sm);
+}
+
+/* Columns */
+.columnName, .columnPrice, .columnTagged {
+  flex: 1;
+  min-width: 100px;
+  word-break: break-word; /* prevent overflow */
+}
+
+/* Price label */
+.columnPrice label {
+  color: var(--reseda-green);
+  font-weight: bold;
+}
+
+/* Tagged friends */
+.columnTagged {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+/* Dropdown to tag friends */
+.selectTag {
+  padding: var(--space-xs);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--dim-gray);
+  font-size: 0.95rem;
+  outline: none;
+  margin-bottom: var(--space-xs);
+}
+
+/* Slider container */
+.sliderContainer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  background-color: var(--battleship-gray);
+  padding: var(--space-xs);
+  border-radius: var(--radius-sm);
+}
+
+/* Info icon */
+.infoIcon {
+  cursor: pointer;
+  margin-right: var(--space-xs);
+  color: var(--cambridge-blue);
+}
+
+/* Portion label */
+.portionLabel {
+  font-size: 0.85rem;
+  margin-right: var(--space-xs);
+  color: var(--text-secondary);
+}
+
+/* Delete button */
+.deleteButton {
+  padding: var(--space-xs) var(--space-sm);
+  background-color: var(--ebony);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.deleteButton:hover {
+  background-color: var(--dim-gray);
+}
+
+/* Slider styling */
+input[type="range"] {
+  width: 100%;
+  max-width: 120px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  .itemRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .columnName, .columnPrice, .columnTagged {
+    flex-basis: 100%;
+  }
+
+  .sliderContainer {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  input[type="range"] {
+    width: 100%;
+  }
+}

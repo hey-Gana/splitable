@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styles from "./FriendsForm.module.css";
 
 function FriendsForm(props) {
 
@@ -16,21 +17,26 @@ function FriendsForm(props) {
         setFriend("")
     }
 
-
     //When User inputs into text box 
     function handleName(event) {
         //extracting the name from the text box input
         setFriend(event.target.value)
     }
 
-
     return (
-        <div>
+        <div className={styles.container}>
             <h3>People:</h3>
             <h4>Enter Name - </h4>
             <form onSubmit={handleSubmission}>
-                <input type="Text" placeholder="Name" onChange={handleName} value={fname} required></input>
-                <button type="submit">Add</button>
+                <input 
+                    type="text" 
+                    placeholder="Name" 
+                    onChange={handleName} 
+                    value={fname} 
+                    required 
+                    className={styles.input} 
+                />
+                <button type="submit" className={styles.button}>Add</button>
             </form>
         </div>
     )

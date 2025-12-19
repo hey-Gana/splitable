@@ -2,6 +2,9 @@ import React from "react";
 import { useState } from "react";
 import { nanoid } from "nanoid";
 
+//Global CSS Import
+import styles from './App.module.css';
+//Intro Section Import
 import Intro from "./components/Intro.jsx";
 //People Section Import
 import Friends from "./components/Friends.jsx";
@@ -144,9 +147,6 @@ function App() {
         return item;
       });
 
-      // // Log the updated array for verification
-      // console.log("Updated items:", newItems);
-
       return newItems;
     });
   }
@@ -176,9 +176,6 @@ function App() {
     );
   }
 
-
-
-
   //Taxes Section
   //taxAmt - taxAmt calculated by Tax.jsx
   //setTaxAmt - a function that assigns value to taxAmt
@@ -189,62 +186,68 @@ function App() {
   //setTipAmt - a function that assigns value to tipAmt
   const [tipAmt, setTipAmt] = useState(0);
 
-
-
-
   return (
-    <div>
-      {/* Introduction of the App */}
-      <Intro />
+    <div className={styles.app}>
+      <div className={styles.appContainer}>
+        {/* Introduction of the App */}
+        <Intro />
 
-      {/* Friends Form Component - passes the function addFriend as props */}
-      <FriendsForm addFriend={addFriend} />
+        {/* Friends Form Component - passes the function addFriend as props */}
+        <FriendsForm addFriend={addFriend} />
 
-      {/* Friends List Component - Displays the friends added*/}
-      <div>
-        <ul>
-          {FriendsList}
-        </ul>
+        {/* Friends List Component - Displays the friends added*/}
+        <div className={styles.section}>
+          <ul>
+            {FriendsList}
+          </ul>
+        </div>
+
+        {/* Items Form Component - Entering food items, prices & their splits */}
+        <Items addItem={addItem} />
+
+        {/* Items List Component - Displays the Items added*/}
+        <div className={styles.section}>
+          {/* Conditional Display of Items added heading */}
+          {itemsDisplay}
+
+          {ListOfItems.length > 0 && (
+            <div className={styles.itemsHeader}>
+              <span>Item Name</span>
+              <span>Price</span>
+              <span>People Tagged</span>
+            </div>
+          )}
+
+          <ul>
+            {items}
+          </ul>
+        </div>
+
+        <div className={styles.section}>
+          <h3>Bill Amount: ${totalAmt.toFixed(2)}</h3>
+        </div>
+
+        {/* Entering Tax */}
+        <div className={styles.section}>
+          {/* passing totalAmt to Tax.jsx */}
+          <Tax totalAmt={totalAmt} onTaxChange={setTaxAmt} />
+        </div>
+
+        {/* Entering Tips */}
+        <div className={styles.section}>
+          {/* passing totalAmt to Tips.jsx */}
+          <Tips totalAmt={totalAmt} onTipChange={setTipAmt} />
+        </div>
+
+        {/* Calculation */}
+        <div className={styles.section}>
+          <SplitCalculator friends={friends} items={ListOfItems} taxAmt={taxAmt} tipAmt={tipAmt} />
+        </div>
+
+        {/* Display Results */}
       </div>
-
-
-      {/* Items Form Component - Entering food items, prices & their splits */}
-      <Items addItem={addItem} />
-
-
-      {/* Items List Component - Displays the Items added*/}
-      <div>
-        {/* Conditional Display of Items added heading */}
-        {itemsDisplay}
-        <ul>
-          {items}
-        </ul>
-      </div>
-
-
-      <div>
-        <h3>Bill Amount: ${totalAmt.toFixed(2)}</h3>
-      </div>
-
-      {/* Entering Tax */}
-      <div>
-        {/* passing totalAmt to Tax.jsx */}
-        <Tax totalAmt={totalAmt} onTaxChange={setTaxAmt} />
-      </div>
-
-      {/* Entering Tips */}
-      <div>
-        {/* passing totalAmt to Tips.jsx */}
-        <Tips totalAmt={totalAmt} onTipChange={setTipAmt} />
-      </div>
-
-      {/* Calculation */}
-      <br />
-      <SplitCalculator friends={friends} items={ListOfItems} taxAmt={taxAmt} tipAmt={tipAmt} />
-
-      {/* Display Results */}
-
     </div>
   )
 }
+
 export default App;

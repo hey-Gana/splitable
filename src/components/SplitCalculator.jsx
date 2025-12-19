@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import html2pdf from "html2pdf.js";
+import styles from "./SplitCalculator.module.css";
 
 function SplitCalculator({ friends, items, taxAmt, tipAmt }) {
   const [splits, setSplits] = useState([]);
@@ -59,11 +60,10 @@ function SplitCalculator({ friends, items, taxAmt, tipAmt }) {
 
     setSplits(results);
   }
-  //function to export to PDF
+
   function exportPDF() {
     if (!summaryRef.current) return;
 
-    // Temporarily show PDF content (needed for html2canvas)
     summaryRef.current.style.position = "static";
     summaryRef.current.style.left = "auto";
 
@@ -78,65 +78,28 @@ function SplitCalculator({ friends, items, taxAmt, tipAmt }) {
       .save();
   }
 
-  // Table styles
-  const th = {
-    border: "1px solid #ccc",
-    padding: "8px",
-    backgroundColor: "#f5f5f5",
-    textAlign: "left",
-  };
-  const td = {
-    border: "1px solid #ccc",
-    padding: "8px",
-  };
-
   return (
-    <div>
+    <div className={styles.container}>
       {/* Calls SplitCost function */}
-      <button onClick={SplitCost}>Split-a-bill</button>
+      <button className={styles.button} onClick={SplitCost}>Split-a-bill</button>
 
-      {/* Display Splits */}
       {splits.length > 0 && (
         <>
-          {/* Export PDF button */}
-          <button onClick={exportPDF}>Export PDF</button>
+          <button className={styles.button} onClick={exportPDF}>Export PDF</button>
 
           {/* PDF CONTENT */}
-          <div
-            ref={summaryRef}
-            style={{
-              padding: "24px",
-              fontFamily: "Helvetica, Arial, sans-serif",
-              fontSize: "12px",
-              lineHeight: "1.6",
-              color: "#222",
-            }}
-          >
-            {/* HEADER */}
-            <div style={{ display: "flex", alignItems: "center", marginBottom: "16px" }}>
-              <img
-                // src="/logo.png"
-                alt=""
-                style={{ width: "60px", marginRight: "16px" }}
-              />
-              <div>
-                <h2 style={{ margin: 0 }}>Split-a-Bill Summary</h2>
-                <p style={{ margin: 0, fontSize: "11px", color: "#555" }}>
-                  Generated on {new Date().toLocaleDateString()}
-                </p>
-              </div>
-            </div>
-
-            <hr />
+          <div ref={summaryRef} className={styles.container}>
+            <h2 className={styles.sectionTitle}>Split-a-Bill Summary</h2>
+            <p>Generated on {new Date().toLocaleDateString()}</p>
 
             {/* Food Items Table */}
-            <h3>Food Items Ordered</h3>
-            <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "20px" }}>
+            <h3 className={styles.sectionTitle}>Food Items Ordered</h3>
+            <table className={styles.table}>
               <thead>
                 <tr>
-                  <th style={th}>Item</th>
-                  <th style={th}>Price ($)</th>
-                  <th style={th}>Split Details</th>
+                  <th className={styles.th}>Item</th>
+                  <th className={styles.th}>Price ($)</th>
+                  <th className={styles.th}>Split Details</th>
                 </tr>
               </thead>
               <tbody>
@@ -147,9 +110,9 @@ function SplitCalculator({ friends, items, taxAmt, tipAmt }) {
 
                   return (
                     <tr key={idx}>
-                      <td style={td}>{itemName}</td>
-                      <td style={td}>{itemPrice}</td>
-                      <td style={td}>
+                      <td className={styles.td}>{itemName}</td>
+                      <td className={styles.td}>{itemPrice}</td>
+                      <td className={styles.td}>
                         {item.taggedFriends?.length > 0 ? (
                           <ul style={{ paddingLeft: "16px", margin: 0 }}>
                             {item.taggedFriends.map(fid => (
@@ -168,42 +131,39 @@ function SplitCalculator({ friends, items, taxAmt, tipAmt }) {
               </tbody>
             </table>
 
-
             {/* Charges Table */}
-            <h3>Charges</h3>
-            <table style={{ width: "50%", borderCollapse: "collapse", marginBottom: "20px" }}>
+            <h3 className={styles.sectionTitle}>Charges</h3>
+            <table className={styles.table} style={{ width: "50%" }}>
               <tbody>
                 <tr>
-                  <td style={td}>Subtotal</td>
-                  <td style={td}>
-                    ${splits.reduce((sum, s) => sum + Number(s.subtotal), 0).toFixed(2)}
-                  </td>
+                  <td className={styles.td}>Subtotal</td>
+                  <td className={styles.td}>${splits.reduce((sum, s) => sum + Number(s.subtotal), 0).toFixed(2)}</td>
                 </tr>
                 <tr>
-                  <td style={td}>Tax</td>
-                  <td style={td}>${Number(taxAmt).toFixed(2)}</td>
+                  <td className={styles.td}>Tax</td>
+                  <td className={styles.td}>${Number(taxAmt).toFixed(2)}</td>
                 </tr>
                 <tr>
-                  <td style={td}>Tip</td>
-                  <td style={td}>${Number(tipAmt).toFixed(2)}</td>
+                  <td className={styles.td}>Tip</td>
+                  <td className={styles.td}>${Number(tipAmt).toFixed(2)}</td>
                 </tr>
               </tbody>
             </table>
 
             {/* Split Summary Table */}
-            <h3>Split Summary</h3>
-            <table style={{ width: "60%", borderCollapse: "collapse", marginBottom: "30px" }}>
+            <h3 className={styles.sectionTitle}>Split Summary</h3>
+            <table className={styles.table} style={{ width: "60%" }}>
               <thead>
                 <tr>
-                  <th style={th}>Person</th>
-                  <th style={th}>Total Owed ($)</th>
+                  <th className={styles.th}>Person</th>
+                  <th className={styles.th}>Total Owed ($)</th>
                 </tr>
               </thead>
               <tbody>
                 {splits.map((s, i) => (
                   <tr key={i}>
-                    <td style={td}>{s.name}</td>
-                    <td style={td}><strong>${s.total}</strong></td>
+                    <td className={styles.td}>{s.name}</td>
+                    <td className={styles.td}><strong>${s.total}</strong></td>
                   </tr>
                 ))}
               </tbody>

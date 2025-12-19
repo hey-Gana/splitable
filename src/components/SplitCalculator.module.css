@@ -1,0 +1,81 @@
+/* Main container */
+.container {
+  background-color: var(--bg-card);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: var(--space-lg);
+  width: 100%;
+}
+
+/* Section titles */
+.sectionTitle {
+  color: var(--reseda-green);
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
+/* Buttons */
+.button {
+  padding: var(--space-sm) var(--space-md);
+  margin-right: var(--space-sm);
+  margin-bottom: var(--space-sm);
+  background-color: var(--reseda-green);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.button:hover {
+  background-color: var(--cambridge-blue);
+}
+
+/* Tables */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--space-md);
+  overflow-x: auto;
+}
+
+.th, .td {
+  border: 1px solid var(--dim-gray);
+  padding: var(--space-xs) var(--space-sm);
+  text-align: left;
+  word-break: break-word;
+}
+
+.th {
+  background-color: var(--battleship-gray);
+  color: #fff;
+}
+
+/* PDF content wrapper */
+.container table {
+  width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .button {
+    width: 100%;
+  }
+
+  .table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .td, .th {
+    font-size: 0.9rem;
+    padding: var(--space-xs);
+  }
+
+  .sectionTitle {
+    font-size: 1rem;
+  }
+}

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styles from "./ItemsList.module.css";
 
 function ItemsList(props) {
   const { id, name, splitFriends } = props;
@@ -27,79 +28,85 @@ function ItemsList(props) {
   function handlePortionChange(friendId, value) {
     const intVal = parseInt(value);
 
-    //setting the portion value for the person with friendId
     setPortions(prev => ({
       ...prev,
       [friendId]: intVal,
     }));
 
-    //parent update - passing it on to parent: App.jsx
+    //pass to parent
     props.updateItemPortions(props.id, {
       ...portions,
       [friendId]: intVal,
     });
   }
 
-
   return (
-    <li>
-      <div>
-        <label id={props.id}>
-          {props.name} - ${props.price}
-        </label>
+    <li className={styles.itemRow}>
+      {/* Item name */}
+      <div className={styles.columnName}>
+        <label id={props.id}>{name}</label>
       </div>
 
-      <div>
-        <h3>
-          People Tagged:
-          <select defaultValue="" onChange={handleDropDownOption}>
-            <option value="" disabled>
-              Tag People
+      {/* Item price */}
+      <div className={styles.columnPrice}>
+        <label>${props.price}</label>
+      </div>
+
+      {/* People Tagged */}
+      <div className={styles.columnTagged}>
+        <select className={styles.selectTag} defaultValue="" onChange={handleDropDownOption}>
+          <option value="" disabled>
+            Tag People
+          </option>
+          {splitFriends.map(friend => (
+            <option key={friend.id} value={friend.id}>
+              {friend.name}
             </option>
-            {/* Displays friends list */}
-            {props.splitFriends.map(friend => (
-              <option key={friend.id} value={friend.id}>
-                {friend.name}
-              </option>
-            ))}
-          </select>
-        </h3>
-        {/* If any friend is tagged, display friend name,slider and remove button ; else split equally */}
+          ))}
+        </select>
+
         {props.taggedFriends.length > 0 ? (
           props.taggedFriends.map(id => {
-            const friend = props.splitFriends.find(f => f.id === id);
+            const friend = splitFriends.find(f => f.id === id);
             if (!friend) return null;
 
             return (
-              <div key={friend.id}>
-                {/* when clicked on friend name: toggle slidervisibility */}
-                <span onClick={() => toggleSlider(friend.id)}>
-                  {friend.name}
-                </span>
-                {/* for friend with slider visibility, set their portion  */}
+              <div key={friend.id} className={styles.sliderContainer}>
+                <span className={styles.infoIcon} onClick={() => toggleSlider(friend.id)}>ℹ️</span>
+                <span>{friend.name}</span>
+
                 {sliderVisibility[friend.id] && (
                   <div>
-                    <label>Portion size: {portions[friend.id] || 1}</label>
-                    <input type="range" min="1" max="5" value={portions[friend.id] || 1} onChange={e => handlePortionChange(friend.id, e.target.value)} />
+                    <label className={styles.portionLabel}>Portion size: {portions[friend.id] || 1}</label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="5"
+                      value={portions[friend.id] || 1}
+                      onChange={e => handlePortionChange(friend.id, e.target.value)}
+                    />
                   </div>
                 )}
 
-                {/* remove button for friend tagged to item */}
-                <button onClick={() => props.removeFriendFromItem(props.id, friend.id)}>
+                <button
+                  className={styles.deleteButton}
+                  onClick={() => props.removeFriendFromItem(props.id, friend.id)}
+                >
                   x
                 </button>
-
               </div>
             );
           })
         ) : (
-          <p>Split Equally</p>
+          <p style={{marginLeft: "6px"}}>Split Equally</p>
         )}
       </div>
 
+      {/* Delete button */}
       <div>
-        {/* Delete item from Item List */}
-        <button onClick={() => props.delItem(props.id)}>Delete Item</button>
+        <button className={styles.deleteButton} onClick={() => props.delItem(props.id)}>
+          Delete Item
+        </button>
       </div>
     </li>
   );

@@ -1,0 +1,65 @@
+/* Container for Tax Section */
+.container {
+  background-color: var(--ebony);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: var(--space-lg);
+  width: 100%;
+}
+
+/* Heading */
+.container h3 {
+  color: var(--reseda-green);
+  margin-bottom: var(--space-sm);
+}
+
+/* Radio button group */
+.radioGroup {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
+.radioGroup label {
+  color: var(--battleship-gray);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+/* Input field */
+.input {
+  width: 200px;
+  max-width: 100%;
+  padding: var(--space-sm);
+  border: 1px solid var(--dim-gray);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+  margin-bottom: var(--space-sm);
+}
+
+.input:focus {
+  border-color: var(--reseda-green);
+}
+
+/* Tax display label */
+.display {
+  font-weight: bold;
+  color: var(--reseda-green);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  .radioGroup {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .input {
+    width: 100%; /* full width on mobile */
+  }
+}

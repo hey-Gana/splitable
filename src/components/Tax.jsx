@@ -1,72 +1,85 @@
 import React, { useState, useEffect } from "react";
+import styles from "./Tax.module.css";
 
-function Tax(props) {
-  //State
-  //taxType -variable for radio button
-  //setTaxType - function that sets value for taxType
+function Tax({ totalAmt, onTaxChange }) {
+  // State
   const [taxType, setTaxType] = useState("");
-
-  //taxValue -variable for text input
-  //setTaxValue- function that sets value for taxValue
   const [taxValue, setTaxValue] = useState("");
 
-  //Cannot do direct props callback as it run into infinite loop - hence using useEffect()
-  //calculation of tax amount
+  // Calculation of tax amount
   useEffect(() => {
-  let taxAmt = 0;
+    let taxAmt = 0;
 
-  if (taxType === "percentage") {
-    taxAmt = props.totalAmt * (Number(taxValue) / 100);
-  } else if (taxType === "amount") {
-    taxAmt = Number(taxValue);
-  }
-  // Call the parent callback only when tax changes
-  props.onTaxChange(taxAmt.toFixed(2));
-}, [taxType, taxValue, props.totalAmt]);
+    if (taxType === "percentage") {
+      taxAmt = totalAmt * (Number(taxValue) / 100);
+    } else if (taxType === "amount") {
+      taxAmt = Number(taxValue);
+    }
 
+    onTaxChange(taxAmt.toFixed(2));
+  }, [taxType, taxValue, totalAmt, onTaxChange]);
 
-// Conditional display: only show tax if % is chosen
+  // Conditional display
   const taxDisplay = taxType === "percentage" && taxValue !== ""
-    ? `Calculated Tax: $${(props.totalAmt * (Number(taxValue) / 100)).toFixed(2)}`
+    ? `Calculated Tax: $${(totalAmt * (Number(taxValue) / 100)).toFixed(2)}`
     : null;
 
-  //Handle radio button change
   function handleTaxType(e) {
     setTaxType(e.target.value);
-    setTaxValue(""); // reset input when changing type
+    setTaxValue("");
   }
 
-  //Handle tax input and restrict to numbers/decimal
   function handleTaxInput(e) {
     const value = e.target.value;
     if (/^\d*\.?\d*$/.test(value)) {
-      //restrict value for % to be between 0 & 100
       if (value === "" || (Number(value) >= 0 && Number(value) <= 100)) {
         setTaxValue(value);
       }
     }
   }
 
-
   return (
-    <div>
-      <h4>Enter Tax</h4>
-      <label>
-        <input
-          type="radio" name="taxtype" value="percentage" onChange={handleTaxType} checked={taxType === "percentage"} />
-        Percentage
-      </label>
-      <label>
-        <input
-          type="radio" name="taxtype" value="amount" onChange={handleTaxType} checked={taxType === "amount"} />
-        Amount
-      </label>
+    <div className={styles.container}>
+      <h3>Tax:</h3>
 
-      <input type="text" placeholder={taxType === "percentage" ? "Enter tax in %" : taxType === "amount" ? "Enter tax amount" : ""} value={taxValue} onChange={handleTaxInput} />
-      {/* Displaying Calculated Tax Amount */}
-      <div>
-        {taxDisplay}
+      <div className={styles.radioGroup}>
+        <label>
+          <input
+            type="radio"
+            name="taxtype"
+            value="percentage"
+            checked={taxType === "percentage"}
+            onChange={handleTaxType}
+          />
+          Percentage
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="taxtype"
+            value="amount"
+            checked={taxType === "amount"}
+            onChange={handleTaxType}
+          />
+          Amount
+        </label>
       </div>
+
+      <input
+        type="text"
+        placeholder={
+          taxType === "percentage"
+            ? "Enter tax in %"
+            : taxType === "amount"
+            ? "Enter tax amount"
+            : ""
+        }
+        value={taxValue}
+        onChange={handleTaxInput}
+        className={styles.input}
+      />
+
+      {taxDisplay && <div className={styles.display}>{taxDisplay}</div>}
     </div>
   );
 }
