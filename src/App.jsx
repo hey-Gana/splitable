@@ -31,7 +31,7 @@ function App() {
   //Function to add new friend to the FriendsList Array
   function addFriend(name) {
     //can only add maximum of 10 friends
-    if (countFriends < 3) {
+    if (countFriends < 10) {
       //uses nanoid for random string id generation 
       const newFriend = { id: nanoid(), name }
       //appends newFriend to the friendlist array
