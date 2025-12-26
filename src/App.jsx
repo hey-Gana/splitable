@@ -39,7 +39,7 @@ function App() {
       // console.log(countFriends + 1)
     }
     else {
-      alert("No more friends can be added!")
+      alert("No more people can be added!")
     }
 
   }
