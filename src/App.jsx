@@ -18,6 +18,7 @@ import Tax from "./components/Tax.jsx";
 import Tips from "./components/Tips.jsx";
 //Split Calculation Import
 import SplitCalculator from "./components/SplitCalculator.jsx";
+import BillUpload from "./components/BillUpload.jsx";
 
 function App() {
 
@@ -125,6 +126,27 @@ function App() {
     // console.log(FriendsList)
   }
 
+  // Add scanned bill items to the items list
+  function handleScanComplete(scannedItems) {
+    /*
+      scannedItems format:
+      [
+        { itemName: "GRMWY OG BABY CARROTS", price: 3.29 },
+        ...
+      ]
+    */
+
+    const newItems = scannedItems.map(item => ({
+      id: nanoid(),
+      iname: item.itemName,
+      price: parseFloat(item.price),
+      taggedFriends: [],
+    }));
+
+    // Append scanned items to existing items
+    setItem(prevItems => [...prevItems, ...newItems]);
+  }
+
   //function to delete items
   function delItem(id) {
     //passing the delItem() to ItemsList.jsx so that it can be called by props
@@ -204,6 +226,9 @@ function App() {
 
         {/* Items Form Component - Entering food items, prices & their splits */}
         <Items addItem={addItem} />
+
+        {/* Bill Upload Option */}
+        <BillUpload onScanComplete={handleScanComplete} />
 
         {/* Items List Component - Displays the Items added*/}
         <div className={styles.section}>
