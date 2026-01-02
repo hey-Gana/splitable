@@ -24,7 +24,8 @@ function BillUpload({ onScanComplete }) {
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://localhost:8080/api/scan", {
+      //exposing to servie url instead of local 
+      const response = await fetch("https://splitabill-cloudrun-119812048152.us-south1.run.app/api/scan", {
         method: "POST",
         body: formData,
       });
